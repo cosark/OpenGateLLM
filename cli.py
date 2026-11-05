@@ -116,7 +116,8 @@ def setup(console: Console, env_file: str) -> tuple[EnvFile | None, int]:
 def run_docker_compose(console: Console, env: EnvFile, local_api: bool = False, local_playground: bool = False) -> int:
     exclude_services = []
     if local_api:
-        exclude_services.append("api")
+        # The local API runs the migrations of the branch: the published image of migrate does not know its revisions and would fail.
+        exclude_services.extend(["api", "migrate"])
     if local_playground:
         exclude_services.append("playground")
 
